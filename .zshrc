@@ -51,7 +51,8 @@ ZSH_THEME="robbyrussell-with-hg"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-ZSH_AUTOSUGGEST_STRATEGY=(buck history completion match_prev_cmd)
+# ZSH_AUTOSUGGEST_STRATEGY=(buck history completion match_prev_cmd)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion match_prev_cmd)
 plugins=(git brew zsh-autosuggestions)
 # Make sure to install these plugins:
 # - git
