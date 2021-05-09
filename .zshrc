@@ -7,7 +7,7 @@ export ZSH=/Users/$(whoami)/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="robbyrussell-with-hg"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -47,10 +47,11 @@ ZSH_THEME="robbyrussell"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Which ggins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+ZSH_AUTOSUGGEST_STRATEGY=(buck history completion match_prev_cmd)
 plugins=(git brew zsh-autosuggestions)
 # Make sure to install these plugins:
 # - git
@@ -58,6 +59,11 @@ plugins=(git brew zsh-autosuggestions)
 # - zsh-autosuggestions, https://github.com/zsh-users/zsh-autosuggestions
 
 source $ZSH/oh-my-zsh.sh
+
+# Facebook mercurial (hg) prompt script
+if [ -f /opt/facebook/hg/share/scm-prompt ]; then
+  source /opt/facebook/hg/share/scm-prompt
+fi
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -120,8 +126,14 @@ alias refresh='source ~/.zshrc'
 # Hyper (GUI terminal)
 alias termsettings='code ~/.hyper.js'
 
-# Directory Navigation.
-alias cdev='cd ~/Development && pwd && ls -d */'
+# Files/directory navigation.
+alias cdev='cd ~/Development'
+alias f="find . -name"
+alias g="grep -r \"$@\" ."
+# alias g="echo $1"
+
+# Mercurial (hg) diffs
+alias hgdiff="hg diff -r bottom^ -r ."
 
 # C/C++
 export PATH="/usr/local/opt/llvm/bin:$PATH"
@@ -137,15 +149,13 @@ function diagnose_java_env() {
     # Default global Java version
     echo "Scanning the JDKs installed on this device..."
     /usr/libexec/java_home -V
-    echo "By default is:"
-    j14
     echo "---"
 }
 function activate_android_jdk() {
     export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/jdk/Contents/Home/
 }
-# diagnose_java_env
-activate_android_jdk
+diagnose_java_env
+# activate_android_jdk # Facebook buck doesn't use JDK from AS.
 # Android
 alias show_fg_activity='adb shell dumpsys activity activities | grep mResumedActivity'
 
@@ -154,7 +164,7 @@ alias venv='source venv/bin/activate'
 alias pynb='jupyter notebook'
 alias pypath='python -c "import sys; print sys.path;"'
 # Python env
-eval "$(pyenv init -)"
+# eval "$(pyenv init -)"
  # Run Python conda env diagnosis.
 function diagnose_conda_env() {
     echo "Scanning your conda env...";
@@ -177,13 +187,13 @@ function activate_default_cond_env() {
         echo "---"
     fi
 }
-diagnose_conda_env
-activate_default_cond_env
+# diagnose_conda_env
+# activate_default_cond_env
 
 # Ruby
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 # Ruby extension: colorls (https://github.com/athityakumar/colorls)
-source $(dirname $(gem which colorls))/tab_complete.sh
+# source $(dirname $(gem which colorls))/tab_complete.sh
 
 # git:
 alias gwip='git commit -am "wip."'
@@ -210,34 +220,35 @@ export LANG=en_US.UTF-8
 
 # NDK
 # android studio version
-export ANDROID="/Users/$USER/Library/Android/sdk/"
-export ANDROID_HOME="/Users/$USER/Library/Android/sdk/"
-export ANDROID_NDK="/Users/$USER/Library/Android/sdk/ndk-bundle"
-export ANDROID_NDK_HOME="/Users/$USER/Library/Android/sdk/ndk-bundle"
-export ANDROID_CMAKE="/Users/$USER/Library/Android/sdk/cmake/3.6.3155560/bin/cmake"
-export ANDROID_HVPROTO=ddm
-export PATH="$PATH:$ANDROID_HOME/platform-tools"
+# export ANDROID="/Users/$USER/Library/Android/sdk/"
+# export ANDROID_HOME="/Users/$USER/Library/Android/sdk/"
+# export ANDROID_NDK="/Users/$USER/Library/Android/sdk/ndk-bundle"
+# export ANDROID_NDK_HOME="/Users/$USER/Library/Android/sdk/ndk-bundle"
+# export ANDROID_CMAKE="/Users/$USER/Library/Android/sdk/cmake/3.6.3155560/bin/cmake"
+# export ANDROID_HVPROTO=ddm
+# export PATH="$PATH:$ANDROID_HOME/platform-tools"
 # homebrew version
 # export ANDROID_HOME="/usr/local/opt/android-sdk"
 # export NDK_HOME="/usr/local/Cellar/android-ndk-r10e/r10e"
 
 # Bintray and JCenter Deployment.
-export BINTRAY_USER="boyw165"
-export BINTRAY_API_KEY="5114c60e291c55cb67962adf765cd8d2b06459dc"
-export JITPACK_API_KEY="jp_a429e25o3jun6tsajl5tjtbpar"
-export GITHUB_USER="boyw165"
-export GITHUB_API_KEY="d4e1ee8431dd529d18d11c9bd009933d69255ac1"
-export GITHUB_API_TOKEN=${GITHUB_API_KEY}
-export FABRIC_API_KEY="899dcee9306ec461449140c2bcf50da976c36991"
-export FABRIC_API_SECRET="79b392c2c1bd297d1afc9fc983822a9023a2542489522791907b686a92e649f2"
-export BINTRAY_CBLUE_USER="cblue"
-export BINTRAY_CBLUE_API_KEY="664a31d896ae5469ae5c13b866c334d587ebb9df"
-export BINTRAY_SO_USER="deploy-sodalabs"
-export BINTRAY_SO_API_KEY="8840ce38d0dad3347314ea3732e91a9ff8fd8721"
-export JITPACK_CI_TOKEN="jp_1bthfr0cqrtp31r7v7d9ncioci"
-export JITPACK_SO_API_KEY=${JITPACK_CI_TOKEN}
+# export BINTRAY_USER="boyw165"
+# export BINTRAY_API_KEY="5114c60e291c55cb67962adf765cd8d2b06459dc"
+# export JITPACK_API_KEY="jp_a429e25o3jun6tsajl5tjtbpar"
+# export GITHUB_USER="boyw165"
+# export GITHUB_API_KEY="d4e1ee8431dd529d18d11c9bd009933d69255ac1"
+# export GITHUB_API_TOKEN=${GITHUB_API_KEY}
+# export FABRIC_API_KEY="899dcee9306ec461449140c2bcf50da976c36991"
+# export FABRIC_API_SECRET="79b392c2c1bd297d1afc9fc983822a9023a2542489522791907b686a92e649f2"
+# export BINTRAY_CBLUE_USER="cblue"
+# export BINTRAY_CBLUE_API_KEY="664a31d896ae5469ae5c13b866c334d587ebb9df"
+# export BINTRAY_SO_USER="deploy-sodalabs"
+# export BINTRAY_SO_API_KEY="8840ce38d0dad3347314ea3732e91a9ff8fd8721"
+# export JITPACK_CI_TOKEN="jp_1bthfr0cqrtp31r7v7d9ncioci"
+# export JITPACK_SO_API_KEY=${JITPACK_CI_TOKEN}
 
-# Source extensions related the projects.
-for ext in ~/Development/*.zshrc; do
-    source $ext
-done
+# added by setup_fb4a.sh
+export ANDROID_SDK=/opt/android_sdk
+export ANDROID_NDK_REPOSITORY=/opt/android_ndk
+export ANDROID_HOME=${ANDROID_SDK}
+export PATH=${PATH}:${ANDROID_SDK}/emulator:${ANDROID_SDK}/tools:${ANDROID_SDK}/tools/bin:${ANDROID_SDK}/platform-tools
