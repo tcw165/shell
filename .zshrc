@@ -26,7 +26,15 @@ source $ZSH/oh-my-zsh.sh
 
 # Print README
 if [ -f ~/.README ]; then
-  cat ~/.README
+  echo "$(cat ~/.README)"
+  echo "---"
+fi
+
+# Suggest to install "fzf"
+if ! fzf_loc="$(which fzf)" || [[ -z $fzf_loc ]]; then
+  echo "Consider install fzf for file fuzzy find!"
+  echo "     run: apt-get install -y fzf"
+  echo "  or run: brew install fzf"
 fi
 
 # In order for VCPKG to run on arm, s390x, and ppc64le platforms.
