@@ -1,0 +1,4 @@
+Tips:
+h       : Print history
+hs      : Search history
+fzf     : Fuzzy find file
