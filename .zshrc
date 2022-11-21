@@ -30,6 +30,11 @@ if [ -f ~/.README ]; then
   echo "---"
 fi
 
+# Suggest to install "brew"
+if [ $(which brew 2>&1 >/dev/null || echo $?) -ne 0 ]; then
+  export PATH=/opt/homebrew/bin:$PATH
+fi
+
 # Suggest to install "fzf"
 if ! fzf_loc="$(which fzf)" || [[ -z $fzf_loc ]]; then
   echo "Consider install fzf for file fuzzy find!"
@@ -39,3 +44,7 @@ fi
 
 # In order for VCPKG to run on arm, s390x, and ppc64le platforms.
 export VCPKG_FORCE_SYSTEM_BINARIES=1
+
+# Android
+export ANDROID_HOME=/Users/boyw165/Library/Android/sdk
+export PATH=$PATH:/Users/boyw165/Library/Android/sdk/platform-tools
