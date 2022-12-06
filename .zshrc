@@ -31,7 +31,7 @@ if [ -f ~/.README ]; then
 fi
 
 # Suggest to install "brew"
-if [ $(which brew 2>&1 >/dev/null || echo $?) -ne 0 ]; then
+if [ $(which brew 2>&1 >/dev/null; echo $?) -ne 0 ]; then
   export PATH=/opt/homebrew/bin:$PATH
 fi
 
